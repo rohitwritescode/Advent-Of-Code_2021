@@ -1,8 +1,9 @@
+//Read input and organize into nested arrays:
 const fs = require("fs");
 const input = fs.readFileSync("./input.txt", "utf-8");
 const movements = input.split("\r\n").map(movement => movement.split(' '));
 
-// Puzzle Part 1:
+// Puzzle part 1:
 function puzzlePart1() {
     let forwardMovement = 0;
     let depth = 0;
@@ -18,7 +19,7 @@ function puzzlePart1() {
     console.log(`Puzzle Part 1: Final Horizontal Position * Final Depth = ${forwardMovement * depth} `);
 }
 
-//Puzzle Part 2:
+//Puzzle part 2:
 function puzzlePart2() {
     let forwardMovement = 0;
     let depth = 0;
