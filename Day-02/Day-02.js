@@ -1,8 +1,8 @@
 const fs = require("fs");
 const input = fs.readFileSync("./input.txt", "utf-8");
+const movements = input.split("\r\n").map(movement => movement.split(' '));
 
 function puzzlePart1() {
-    const movements = input.split("\r\n").map(movement => movement.split(' '));
     let forwardMovement = 0;
     let depth = 0;
     movements.forEach(movement => {
@@ -14,7 +14,25 @@ function puzzlePart1() {
             depth-= parseInt(movement[1]);
         }
     });
-    console.log(`Final Horizontal Position * Final Dpeth = ${forwardMovement * depth} `);
+    console.log(`Puzzle Part 1: Final Horizontal Position * Final Depth = ${forwardMovement * depth} `);
+}
+
+function puzzlePart2() {
+    let forwardMovement = 0;
+    let depth = 0;
+    let aim = 0;
+    movements.forEach(movement => {
+        if (movement[0] === 'forward') {
+            forwardMovement+= parseInt(movement[1]);
+            depth+= (aim * parseInt(movement[1]));
+        } else if (movement[0] === 'down') {
+            aim+= parseInt(movement[1]);
+        } else {
+            aim-= parseInt(movement[1]);
+        }
+    });
+    console.log(`Puzzle Part 2: Final Horizontal Position * Final Depth = ${forwardMovement * depth} `);
 }
 
 puzzlePart1();
+puzzlePart2();
