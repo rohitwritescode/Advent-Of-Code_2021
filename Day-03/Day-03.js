@@ -7,15 +7,19 @@ const binArrays = input.split("\r\n").map(binary => binary.split(''));
 function calculatePCAndLSR(binArrays) {
 
     //Calculate 2D array with bits sorted by index (1st bit of all inputs sorted into an array in index 1, 2nd bit of all inputs sorted into an array in index 2 etc):
-    let sortedBinArray = new Array(binArrays[0].length).fill(0).map(() => new Array(binArrays.length).fill(0));
-    binArrays.forEach((binArray, arrayIndex) => {
-        binArray.forEach((bit, bitIndex) => {
-            sortedBinArray[bitIndex][arrayIndex] = bit;
+    function modifyBinArray(input2DArray) {
+        let modifiedArray = new Array(input2DArray[0].length).fill(0).map(() => new Array(input2DArray.length).fill(0));
+        input2DArray.forEach((binArray, arrayIndex) => {
+            binArray.forEach((bit, bitIndex) => {
+                modifiedArray[bitIndex][arrayIndex] = bit;
+            });
         });
-    });
+        return modifiedArray;
+    }
+    
 
     //Calculate Gamma Rate:
-    const gammaRateArray = sortedBinArray.map(bitArray => {
+    const gammaRateArray = modifyBinArray(binArrays).map(bitArray => {
         if (bitArray.filter(bit => bit==0).length > bitArray.filter(bit => bit==1).length) {
             return 0;
         } else {
@@ -30,32 +34,34 @@ function calculatePCAndLSR(binArrays) {
     powerConsumption = parseInt(gammaRateArray.join(''), 2) * parseInt(epsilonRateArray.join(''), 2);
     console.log(`The Power Consumption is: ${powerConsumption}`)
 
+    
     //Puzzle Part 2 - Calculate Life Support Rating:
-    function calculateLSR(binArrays, gammaRateArray, epsilonRateArray) {
-        let reducingArray = new Array(binArrays.length).fill(0).map(() => new Array(binArrays[0].length).fill(0));
-        reducingArray = [...binArrays]
-
-        //Calculate Oxygen Generator Rating:
-        gammaRateArray.forEach((gammaRateBit, gammaRatebitIndex) => {
-            while(reducingArray.length > 1) {
-                reduceBinArray(reducingArray, gammaRatebitIndex, gammaRateBit)
-            }
-
-            function reduceBinArray(binArrayToReduce, bitIndex, bitToCompare) {
-                binArrayToReduce.forEach((binArray, binArrayIndex) => {
-                    if(binArray[bitIndex] !== bitToCompare) {
-                        binArrayToReduce.splice(binArrayIndex,1);
-                    }
-                });
-                return binArrayToReduce;
+    //Calculate Oxygen Generator Rating:
+    function reduceBinArray(binArrayToReduce, bitIndex, bitToCompare) {
+        binArrayToReduce.forEach((binArray, binArrayIndex) => {
+            if(binArray[bitIndex] !== bitToCompare) {
+                binArrayToReduce.splice(binArrayIndex,1);
             }
         });
-        return reducingArray;
+        return binArrayToReduce;
     }
+
+    let binArrays2 = [];
+    binArrays2 = [...binArrays]
+    let comparisonIndex = 0;
+    const o2GenRating = modifyBinArray(binArrays2).map((binArray, binArrayIdx) => {
+        if (binArray.filter(bit => bit==0).length > binArray.filter(bit => bit==1).length) {
+            while (binArrays2.length > 1) {
+                reduceBinArray(binArrays2,comparisonIndex,0);
+            }   
+        } else {
+            while (binArrays2.length > 1) {
+                reduceBinArray(binArrays2,comparisonIndex,0);
+            }
+        }
+    });
     
-    console.log('Raw Data', binArrays)
-    console.log('Gamma', gammaRateArray)
-    console.log('Reduced Array', calculateLSR(binArrays,gammaRateArray,epsilonRateArray));
+    console.log('O2 Gen', o2GenRating)
 }
 
 calculatePCAndLSR(binArrays);
