@@ -12,11 +12,13 @@ input.split('\r\n').forEach(coordSet => {
     y2Array.push(parseInt((coordSet.split(/,| /))[4]));
 })
 
+// Get max value from an array:
 function getMaxOfArray(arr) {
     return arr.reduce((accumulator, element) => {
          return Math.max(accumulator, element);
      });
  }
+ 
  
  function getIndividualLineCoordinates(x1,y1,x2,y2,coordMapToUpdate) {
      if (x1 === x2) {
@@ -45,12 +47,11 @@ function getMaxOfArray(arr) {
 
  function getLatestCoordMap(x1Array,y1Array,x2Array,y2Array,xMax,yMax,inputCoordMap) {
     let updatedCoordMap = new Array(yMax).fill(0).map(() => new Array(xMax).fill(0));
-    for (let yCoord = 0; yCoord <= yMax; yCoord++) {
-        for (let xCoord = 0; xCoord <= xMax; xCoord++) {
-            updatedCoordMap = getIndividualLineCoordinates(x1Array[xCoord], y1Array[yCoord], x2Array[xCoord], y2Array[yCoord],inputCoordMap);
-            inputCoordMap = [...updatedCoordMap];
-        }
+    for (let coord = 0; coord <= x1Array.length; coord++) {
+        updatedCoordMap = getIndividualLineCoordinates(x1Array[coord], y1Array[coord], x2Array[coord], y2Array[coord],inputCoordMap);
+        inputCoordMap = [...updatedCoordMap];
     }
+    
     return updatedCoordMap;
 }
 
@@ -58,6 +59,7 @@ const xMax = getMaxOfArray([...x1Array,...x2Array]);
 const yMax = getMaxOfArray([...y1Array,...y2Array]);
 const coordMap = new Array(yMax).fill(0).map(() => new Array(xMax).fill(0));
 
+// const noOfPointsWhere2OrLargerOverlap = getLatestCoordMap(x1Array,y1Array,x2Array,y2Array,xMax,yMax,coordMap);
 const noOfPointsWhere2OrLargerOverlap = getLatestCoordMap(x1Array,y1Array,x2Array,y2Array,xMax,yMax,coordMap).filter(coord => coord >=2).length;
 console.log('No. of points: ', noOfPointsWhere2OrLargerOverlap);
 
