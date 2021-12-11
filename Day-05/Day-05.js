@@ -55,13 +55,13 @@ function getMaxOfArray(arr) {
     return updatedCoordMap;
 }
 
-const xMax = getMaxOfArray([...x1Array,...x2Array]);
-const yMax = getMaxOfArray([...y1Array,...y2Array]);
+const xMax = getMaxOfArray([...x1Array,...x2Array])+1;
+const yMax = getMaxOfArray([...y1Array,...y2Array])+1;
 const coordMap = new Array(yMax).fill(0).map(() => new Array(xMax).fill(0));
 
 // const noOfPointsWhere2OrLargerOverlap = getLatestCoordMap(x1Array,y1Array,x2Array,y2Array,xMax,yMax,coordMap);
-const noOfPointsWhere2OrLargerOverlap = getLatestCoordMap(x1Array,y1Array,x2Array,y2Array,xMax,yMax,coordMap).filter(coord => coord >=2).length;
-console.log('No. of points: ', noOfPointsWhere2OrLargerOverlap);
+const coordMapWithVents = getLatestCoordMap(x1Array,y1Array,x2Array,y2Array,xMax,yMax,coordMap);
+console.log('No. of points: ', coordMapWithVents.flat().filter(coord => coord >=2).length);
 
 
 
